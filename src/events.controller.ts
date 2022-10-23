@@ -1,6 +1,6 @@
 import { Controller, Get, Patch, Post, Delete, Param, Body, HttpCode } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { MoreThan, Repository } from "typeorm";
+import { Like, MoreThan, Repository } from "typeorm";
 import { CreateEventDto } from "./create-event.dto";
 import { Event } from "./event.entity";
 import { UpdateEventDto } from "./update-event.dto";
@@ -17,9 +17,16 @@ export class EventsController {
     @Get('/practice')
     async practice() {
         return await this.repository.find({
-            where: { 
+            select: ['id', 'when'],
+            where: [{ 
                 id: MoreThan(3),
                 when: MoreThan(new Date('2021-02-12T13:00:00'))
+            },{
+                name: Like('%meet%')
+            }],
+            take: 2 , // limits the number of data to 2
+            order: {
+                id: 'DESC'
             }
         })
     }
