@@ -1,19 +1,20 @@
 import { Module } from '@nestjs/common';
-import { EventsController } from './events/events.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Event } from './events/event.entity';
 import { EventsModule } from './events/events.module';
 import { AppService } from './app.service';
 import { AppJapanService } from './app.japan.service';
-
+import { ConfigModule } from '@nestjs/config'
 @Module({
-  imports: [TypeOrmModule.forRoot({
+  imports: [
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRoot({
     type: 'postgres',
-    host: 'localhost',
-    port: 5432,
-    username: 'postgres',
-    password: 'root',
-    database: 'nest-events',
+    host: process.env.DB_HOST,
+    port: +process.env.DB_PORT,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     entities: [Event],
     synchronize: true
   }),
