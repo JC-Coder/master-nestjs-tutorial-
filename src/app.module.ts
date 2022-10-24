@@ -1,23 +1,21 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Event } from './events/event.entity';
 import { EventsModule } from './events/events.module';
 import { AppService } from './app.service';
 import { AppJapanService } from './app.japan.service';
 import { ConfigModule } from '@nestjs/config'
+import ormConfig from './config/orm.config';
+import ormConfigProd from './config/orm.config.prod';
 @Module({
   imports: [
-    ConfigModule.forRoot(),
-    TypeOrmModule.forRoot({
-    type: 'postgres',
-    host: process.env.DB_HOST,
-    port: +process.env.DB_PORT,
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    entities: [Event],
-    synchronize: true
-  }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [ormConfig],
+      expandVariables: true
+    }),
+    TypeOrmModule.forRootAsync({
+      useFactory: process.env.NODE_ENV !== 'production' ? ormConfig : ormConfigProd
+    }),
   EventsModule
 ],
   controllers: [],
