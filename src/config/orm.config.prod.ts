@@ -1,6 +1,5 @@
 import { registerAs } from "@nestjs/config";
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
-import { Event } from "../events/event.entity";
 
 export default registerAs('orm.config', (): TypeOrmModuleOptions => ({
     type: 'postgres',
