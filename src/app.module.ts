@@ -6,6 +6,7 @@ import { AppJapanService } from './app.japan.service';
 import { ConfigModule } from '@nestjs/config'
 import ormConfig from './config/orm.config';
 import ormConfigProd from './config/orm.config.prod';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -16,7 +17,8 @@ import ormConfigProd from './config/orm.config.prod';
     TypeOrmModule.forRootAsync({
       useFactory: process.env.NODE_ENV !== 'production' ? ormConfig : ormConfigProd
     }),
-  EventsModule
+  EventsModule,
+  AuthModule
 ],
   controllers: [],
   providers: [
